@@ -44,7 +44,6 @@
             margin-bottom: 30px;
         }
 
-        /* Semester Picker - Dark Mode */
         .semester-picker {
             background: rgba(255, 255, 255, 0.03);
             padding: 24px;
@@ -156,11 +155,11 @@
             padding: 18px;
             border-radius: 14px;
             font-size: 16px;
-            font-weight: 800;
+            font-weight: 700;
             border: none;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             box-shadow: 0 10px 20px rgba(16, 153, 132, 0.3);
             transition: all 0.3s;
         }
@@ -196,8 +195,28 @@
             <h2>Add Courses</h2>
             <p>Update your academic portfolio for the new term</p>
         </div>
-
-        <form method="POST" action="#">
+        @if (session('gpa') !== null)
+            <div style="
+                background: rgba(16, 152, 132, 0.25);
+                border: 1px solid #34f9dc;
+                border-radius: 16px;
+                padding: 24px;
+                margin: 0 0 35px 0;
+                text-align: center;
+                animation: fadeIn 0.6s ease-out;
+            ">
+                <h3 style="margin: 0 0 12px 0; color: #34f9dc; font-size: 24px;">
+                    {{ session('semester') }} GPA
+                </h3>
+                <div style="font-size: 52px; font-weight: 700; color: white; line-height: 1;">
+                    {{ number_format(session('gpa'), 2) }}
+                </div>
+                <p style="margin: 12px 0 0 0; color: #87e8da; font-size: 15px;">
+                    Successfully saved!
+                </p>
+            </div>
+        @endif
+        <form method="POST" action="{{ route('cgpa.store') }}">
             @csrf
 
             <div class="semester-picker">
@@ -205,7 +224,7 @@
                     <label class="header-label" style="display:block; margin-bottom:10px;">Semester</label>
                     <select name="semester_season" class="form-select" required>
                         <option value="">Choose Semester</option>
-                        <option value="Fall">Autumn</option>
+                        <option value="Autumn">Autumn</option>
                         <option value="Spring">Spring</option>
                         <option value="Summer">Summer</option>
                     </select>
@@ -233,7 +252,7 @@
                 <div class="course-row">
                     <input type="text" name="courses[0][code]" class="form-input" placeholder="SWE-101" required>
                     <input type="text" name="courses[0][title]" class="form-input" placeholder="Programming I" required>
-                    <input type="number" name="courses[0][credits]" step="0.5" min="1" max="6" class="form-input" placeholder="3.0" required>
+                    <input type="number" name="courses[0][credits]" step="0.5" min="1" max="9" class="form-input" placeholder="3.0" required>
                     <select name="courses[0][grade]" class="form-select" required>
                         <option value="">Select Grade</option>
                         <option value="4.00">A+ (4.00)</option>
@@ -256,14 +275,14 @@
             </button>
 
             <button type="submit" class="btn-submit">
-                Confirm & Save Records
+                Calculate CGPA
             </button>
 
             <div class="back-link">
                 <a href="{{ route('dashboard') }}">← Back to Dashboard</a>
             </div>
         </form>
-    </div>
+    </div>    
 
     <script>
         let courseIndex = 1;

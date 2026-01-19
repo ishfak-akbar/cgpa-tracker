@@ -18,8 +18,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/cgpa/create', [CgpaController::class, 'create'])->name('cgpa.create');
-});
+Route::get('/cgpa/create', [CgpaController::class, 'create'])->name('cgpa.create');
+Route::post('/cgpa/store', [CgpaController::class, 'store'])->name('cgpa.store');
+
 
 require __DIR__.'/auth.php';
