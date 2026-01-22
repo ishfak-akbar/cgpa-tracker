@@ -125,7 +125,8 @@
                 <div style="text-align: center;">
                     <a href="{{ route('cgpa.create') }}" 
                     style="padding:10px;
-                    font-size: 0.875rem; 
+                    font-size: 14px; 
+                    font-weight:500;
                     letter-spacing: 0.06em; 
                     background:#34f9dc; 
                     border-radius:10px;" 
@@ -138,7 +139,7 @@
             
 
             @forelse ($semesters as $semester)
-                <div style="border: 1px solid #ffffff; border-radius:10px;padding:10px 0;margin-bottom:22px;">
+                <div style="border: 1px solid #ffffff; border-radius:10px;padding:10px 0;margin-bottom:30px;">
                     <div style="display:flex; justify-content:space-between; padding:0 45px;font-size: 32px; font-weight: 700; color: white; margin-bottom: 5px;">
                         <div>
                             <h4">
