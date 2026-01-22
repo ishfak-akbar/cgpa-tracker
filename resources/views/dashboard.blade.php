@@ -117,15 +117,14 @@
             </div>
 
             <!-- Semester Breakdown -->
-            <div style="display: flex;justify-content:space-between;">
+            <div style="display: flex;justify-content:space-between; margin-bottom:20px">
                 <div>
-                    <h3 class="stat-label" style="color:white; padding: 0 8px; margin-bottom: 24px; font-size: 1.1rem;">Semester Breakdown</h3>
+                    <h3 class="stat-label" style="color:white; padding: 0 8px; font-size: 18px;">Semester Breakdown</h3>
                 </div>
                 @if($semesters->isNotEmpty())
                 <div style="text-align: center;">
                     <a href="{{ route('cgpa.create') }}" 
                     style="padding:10px;
-                    margin-top: 32px; 
                     font-size: 0.875rem; 
                     letter-spacing: 0.06em; 
                     background:#34f9dc; 
@@ -139,8 +138,8 @@
             
 
             @forelse ($semesters as $semester)
-                <div style="border: 1px solid #ffffff; border-radius:10px;padding:20px 0;margin-bottom:22px;">
-                    <div style="display:flex; justify-content:space-between; padding:0 50px;font-size: 2rem; font-weight: 700; color: white; margin: 0;">
+                <div style="border: 1px solid #ffffff; border-radius:10px;padding:10px 0;margin-bottom:22px;">
+                    <div style="display:flex; justify-content:space-between; padding:0 45px;font-size: 32px; font-weight: 700; color: white; margin-bottom: 5px;">
                         <div>
                             <h4">
                                 {{ $semester->name }}
@@ -157,33 +156,40 @@
                         </div>
                     </div>
 
-                    <div class="table-header" style="display:flex; justify-content:space-between; color:white;padding:5px 50px;">
-                        <span>Code</span>
-                        <span>Course Title</span>
-                        <span>Credits</span>
-                        <span>Grade Point</span>
-                    </div>
-
-                    @forelse ($semester->courses as $course)
-                        <div style="display: flex; justify-content:space-between;padding:0 50px; margin-bottom:10px">
-                            <div style="font-family: 'SF Mono', Menlo, monospace; color: #a5f3fc; font-size: 0.95rem;">
-                                {{ $course->code }}
-                            </div>
-                            <div style="color: #e5e7eb; font-weight: 500;">
-                                {{ $course->title }}
-                            </div>
-                            <div style="color: #9ca3af;">
-                                {{ number_format($course->credits, 1) }}
-                            </div>
-                            <div style="font-weight: bold; color: #34f9dc;">
-                                {{ number_format($course->grade, 2) }}
-                            </div>
-                        </div>
-                    @empty
-                        <div style="padding: 40px 28px; text-align: center; color: rgba(255,255,255,0.6);">
-                            No courses recorded for this semester
-                        </div>
-                    @endforelse
+                    <table style="width:100%; border-collapse: collapse; background: rgba(5,17,16,0.4); border-radius: 12px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: rgba(52,249,220,0.08); text-align:center;">
+                                <th style="color:white; padding:12px 50px; font-weight:600;">Code</th>
+                                <th style="color:white; padding:12px 50px; font-weight:600;">Course Title</th>
+                                <th style="color:white; padding:12px 50px; font-weight:600;">Credits</th>
+                                <th style="color:white; padding:12px 50px; font-weight:600;">Grade Point</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($semester->courses as $course)
+                                <tr style="border-bottom: 1px solid rgba(52,249,220,0.15);text-align:center;">
+                                    <td style="font-family: 'SF Mono', Menlo, monospace; color: #a5f3fc; font-size: 16px; padding: 12px 50px;">
+                                        {{ $course->code }}
+                                    </td>
+                                    <td style="color: #e5e7eb; font-weight: 500; padding: 12px 50px;">
+                                        {{ $course->title }}
+                                    </td>
+                                    <td style="color: #9ca3af; padding: 12px 50px;">
+                                        {{ number_format($course->credits, 1) }}
+                                    </td>
+                                    <td style="font-weight: bold; color: #34f9dc; padding: 12px 50px;">
+                                        {{ number_format($course->grade, 2) }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" style="padding: 40px 28px; text-align: center; color: rgba(255,255,255,0.6);">
+                                        No courses recorded for this semester
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             @empty
                 <div class="glass-card" style="padding: 80px 40px; text-align: center;">
