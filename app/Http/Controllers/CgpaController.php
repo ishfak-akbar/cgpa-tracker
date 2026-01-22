@@ -70,4 +70,33 @@ class CgpaController extends Controller
             ->with('semester', $semester->name);
 
     }
+
+    public function index()
+    {
+        $query = Semester::where('user_id', Auth::id());
+
+        if (request('season')) {
+            $query->where('season', request('season'));
+        }
+
+        if (request('year')) {
+            $query->where('year', request('year'));
+        }
+
+        $semesters = $query->with('courses')->get();
+
+        $totalPoints = 0.0;
+        $totalCredits = 0.0;
+
+        foreach (Semester::where('user_id', Auth::id())->with('courses')->get() as $semester) {
+            foreach ($semester->courses as $course) {
+                $totalPoints += $course->grade * $course->credits;
+                $totalCredits += $course->credits;
+            }
+        }
+
+        $cgpa = ($totalCredits > 0) ? round($totalPoints / $totalCredits, 2) : 0.00;
+
+        return view('dashboard', compact('semesters', 'cgpa', 'totalCredits'));
+    }
 }

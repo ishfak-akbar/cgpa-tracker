@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/cgpa/create', [CgpaController::class, 'create'])->name('cgpa.create');
 Route::post('/cgpa/store', [CgpaController::class, 'store'])->name('cgpa.store');
+Route::get('/cgpa', [CgpaController::class, 'index'])->name('cgpa.index');
 
 
 require __DIR__.'/auth.php';

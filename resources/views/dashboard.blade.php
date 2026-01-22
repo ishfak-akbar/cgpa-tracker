@@ -45,39 +45,20 @@
             box-shadow: 0 15px 30px rgba(52, 249, 220, 0.5);
         }
 
-        .semester-card {
-            margin-bottom: 40px;
-            border-radius: 20px;
-            overflow: hidden;
+        .filter-select {
+            background: rgba(5,17,16,0.7);
+            color: white;
+            border: 1px solid rgba(52,249,220,0.3);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            min-width: 140px;
         }
 
-        .course-row {
-            display: grid;
-            grid-template-columns: 1.2fr 3fr 0.9fr 1.2fr;
-            gap: 20px;
-            padding: 16px 28px;
-            align-items: center;
-            transition: background 0.2s;
-        }
-
-        .course-row:hover {
-            background: rgba(52, 249, 220, 0.08);
-        }
-
-        .table-header {
-            display: grid;
-            grid-template-columns: 1.2fr 3fr 0.9fr 1.2fr;
-            gap: 20px;
-            padding: 0 28px 12px;
-            border-bottom: 1px solid rgba(52, 249, 220, 0.3);
-        }
-
-        .table-header span {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 700;
-            color: #34f9dc;
+        .filter-select:focus {
+            outline: none;
+            border-color: #34f9dc;
+            box-shadow: 0 0 0 3px rgba(52,249,220,0.2);
         }
     </style>
     @endsection
@@ -102,47 +83,42 @@
                     </div>
                     <div style="position: absolute; right: -5px; bottom: -40px; width: 356px; height: 256px; background: #34f9dc; opacity: 0.05; border-radius: 9999px; filter: blur(64px);"></div>
                 </div>
-
-                <!-- <div class="glass-card" style="padding: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                    <span class="stat-label" style="color: white;">Academic Standing</span>
-                    <div style="margin-top: 16px; padding: 16px 32px; border-radius: 9999px; border: 2px dashed rgba(52, 249, 220, 0.3);">
-                        <span style="font-size: 1.5rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; color: white;">
-                            {{ $cgpa >= 3.5 ? 'Honors' : ($cgpa >= 2.0 ? 'Good' : 'Warning') }}
-                        </span>
-                    </div>
-                    <a href="{{ route('cgpa.create') }}" class="btn-neon" style="padding:10px;margin-top: 32px; font-size: 0.875rem; letter-spacing: 0.08em; background:#34f9dc; border-radius:10px;">
-                        + Update Record
-                    </a>
-                </div> -->
             </div>
 
-            <!-- Semester Breakdown -->
-            <div style="display: flex;justify-content:space-between; margin-bottom:20px">
+            <!-- Semester Breakdown Header + Filters  -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
                 <div>
                     <h3 class="stat-label" style="color:white; padding: 0 8px; font-size: 18px;">Semester Breakdown</h3>
                 </div>
-                @if($semesters->isNotEmpty())
-                <div style="text-align: center;">
+
+                <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; ">
+                    <select style="font-size: 14px; font-weight:500;letter-spacing: 0.06em;box-shadow: inset 0 0 0 2px #34f9dc; border-radius:10px; background-color:transparent; color:white" id="filter-season" class="filter-select" onchange="window.location.href = this.value ? '{{ url('/cgpa?season=') }}' + this.value + (document.getElementById('filter-year').value ? '&year=' + document.getElementById('filter-year').value : '') : '{{ url('/cgpa') }}'">
+                        <option value="" style="background-color:#0e2420;">All Seasons</option>
+                        <option value="Autumn"  {{ request('season') == 'Autumn' ? 'selected' : '' }}  style="background-color:#0e2420;">Autumn</option>
+                        <option value="Spring" {{ request('season') == 'Spring' ? 'selected' : '' }}  style="background-color:#0e2420;">Spring</option>
+                        <option value="Summer" {{ request('season') == 'Summer' ? 'selected' : '' }}  style="background-color:#0e2420;">Summer</option>
+                    </select>
+
+                    <select style="font-size: 14px; font-weight:500;letter-spacing: 0.06em;box-shadow: inset 0 0 0 2px #34f9dc; border-radius:10px; background-color:transparent; color:white" id="filter-year" class="filter-select" onchange="window.location.href = this.value ? '{{ url('/cgpa?year=') }}' + this.value + (document.getElementById('filter-season').value ? '&season=' + document.getElementById('filter-season').value : '') : '{{ url('/cgpa') }}'">
+                        <option value="" style="background-color:#0e2420;">All Years</option>
+                        @for ($y = date('Y') - 5; $y <= date('Y') + 2; $y++)
+                            <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }} style="background-color:#0e2420;">{{ $y }}</option>
+                        @endfor
+                    </select>
+
                     <a href="{{ route('cgpa.create') }}" 
-                    style="padding:10px;
-                    font-size: 14px; 
-                    font-weight:500;
-                    letter-spacing: 0.06em; 
-                    background:#34f9dc; 
-                    border-radius:10px;" 
-                    >
+                       style="padding:10px; font-size: 14px; font-weight:500; letter-spacing: 0.06em; background:#34f9dc; border-radius:10px;">
                         + Add New Semester
                     </a>
                 </div>
-            @endif
             </div>
-            
 
+            <!-- Semester list or no-data message -->
             @forelse ($semesters as $semester)
                 <div style="border: 1px solid #ffffff; border-radius:10px;padding:10px 0;margin-bottom:30px;">
                     <div style="display:flex; justify-content:space-between; padding:0 45px;font-size: 32px; font-weight: 700; color: white; margin-bottom: 5px;">
                         <div>
-                            <h4">
+                            <h4>
                                 {{ $semester->name }}
                             </h4>
                             <span style="font-size: 15px; color: #9ca3af; text-transform: uppercase; display:block">
@@ -195,15 +171,13 @@
             @empty
                 <div class="glass-card" style="padding: 80px 40px; text-align: center;">
                     <p style="color: #9ca3af; font-size: 1.125rem; margin-bottom: 24px;">
-                        No academic data found yet.
+                        No academic data found for the selected semester.
                     </p>
                     <a href="{{ route('cgpa.create') }}" class="btn-neon" style="padding: 14px 40px;">
-                        Initialize First Term
+                        Initialize First Term →
                     </a>
                 </div>
             @endforelse
-
-            
 
         </div>
     </div>

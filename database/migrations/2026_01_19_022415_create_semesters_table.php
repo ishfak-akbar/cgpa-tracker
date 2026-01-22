@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('season');           // Fall, Spring, Summer
-            $table->year('year');               // 2020–2030 etc.
-            $table->string('name')->nullable(); // optional: "Fall 2025"
+            $table->string('season');         
+            $table->year('year');               
+            $table->string('name')->nullable(); 
             $table->decimal('gpa', 4, 2)->nullable();
             $table->timestamps();
 
-            $table->unique(['user_id', 'season', 'year']); // prevent duplicates
+            $table->unique(['user_id', 'season', 'year']); 
         });
     }
 
